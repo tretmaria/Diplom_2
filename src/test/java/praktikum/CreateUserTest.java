@@ -54,9 +54,9 @@ public class CreateUserTest {
         userClient.createUser(user);
         accessToken = userClient.loginUser(UserCredentials.from(user)).extract().path("accessToken");
         int statusCode = userClient.createUser(user).extract().statusCode();
-        boolean isCourierIdentical = userClient.createUser(user).extract().path("message").toString().contains("User already exists");
+        boolean isUserIdentical = userClient.createUser(user).extract().path("message").toString().contains("User already exists");
 
-        assertTrue("Создано два одинаковых курьера", isCourierIdentical);
+        assertTrue("Создано два одинаковых пользователя", isUserIdentical);
         assertThat("Неверный код статуса", statusCode, equalTo(403));
     }
 }
