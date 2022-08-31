@@ -35,13 +35,9 @@ public class CreateUserTest {
     @DisplayName("Create a user successfully")
     public void shouldCreateUserTest() {
         ValidatableResponse response = userClient.createUser(user);
-        System.out.println(user);
         boolean isUserCreated = response.extract().path("success");
-        System.out.println(isUserCreated);
         int statusCode = response.extract().statusCode();
-        System.out.println(statusCode);
         accessToken = response.extract().path("accessToken");
-        System.out.println(accessToken);
 
         assertTrue("Пользователь не создан", isUserCreated);
         assertThat("Неверный код статуса", statusCode, equalTo(200));

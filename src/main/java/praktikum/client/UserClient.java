@@ -14,7 +14,6 @@ public class UserClient extends RestAssuredClient{
     public ValidatableResponse createUser(User user) {
         return given()
                 .spec(getBaseSpec())
-                //.header("Content-type", "application/json")
                 .body(user)
                 .when()
                 .post(USER_PATH + "register")
@@ -24,7 +23,6 @@ public class UserClient extends RestAssuredClient{
     public ValidatableResponse loginUser(UserCredentials credentials) {
         return given()
                 .spec(getBaseSpec())
-                //.header("Content-type", "application/json")
                 .body(credentials)
                 .when()
                 .post(USER_PATH + "login")
@@ -34,7 +32,6 @@ public class UserClient extends RestAssuredClient{
     public ValidatableResponse changeUserData(UserCredentials credentials, String accessToken){
         return given()
                 .spec(getBaseSpec())
-                //.header("Content-type", "application/json")
                 .auth().oauth2(accessToken)
                 .and()
                 .body(credentials)
@@ -46,6 +43,7 @@ public class UserClient extends RestAssuredClient{
     public ValidatableResponse logoutUser(String accessToken) {
         return given()
                 .spec(getBaseSpec())
+                .auth().oauth2(accessToken)
                 .when()
                 .post(USER_PATH + "logout")
                 .then();
@@ -54,6 +52,7 @@ public class UserClient extends RestAssuredClient{
     public ValidatableResponse deleteUser(String accessToken){
         return given()
                 .spec(getBaseSpec())
+                .auth().oauth2(accessToken)
                 .when()
                 .delete(USER_PATH + "user")
                 .then();

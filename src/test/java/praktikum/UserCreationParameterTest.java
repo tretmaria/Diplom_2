@@ -25,12 +25,6 @@ public class UserCreationParameterTest {
     public void setUp() {
         userClient = new UserClient();
     }
-
-    @After
-    public void tearDown() {
-        userClient.deleteUser(accessToken);
-    }
-
     public UserCreationParameterTest(User user, int statusCode, String errorMessage) {
         this.user = user;
         this.statusCode = statusCode;
@@ -51,6 +45,7 @@ public class UserCreationParameterTest {
     @Description("Create a user with empty fields")
     public void checkUserDataTest() {
         ValidatableResponse response = userClient.createUser(user);
+        accessToken = response.extract().path("accessToken");
         int actualStatusCode = response.extract().statusCode();
         String actualMessage = response.extract().path("message");
 

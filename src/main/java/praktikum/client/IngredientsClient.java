@@ -14,7 +14,6 @@ public class IngredientsClient extends RestAssuredClient {
     public ValidatableResponse getIngredients() {
         return given()
                 .spec(getBaseSpec())
-                //.body(ingredients)
                 .when()
                 .get(INGREDIENTS_PATH)
                 .then();

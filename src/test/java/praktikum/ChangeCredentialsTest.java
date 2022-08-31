@@ -1,11 +1,10 @@
 package praktikum;
 
 import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import io.qameta.allure.junit4.DisplayName;
 import praktikum.client.UserClient;
 import praktikum.model.User;
 import praktikum.util.UserCredentials;
@@ -24,16 +23,8 @@ public class ChangeCredentialsTest {
     @Before
     public void setUp() {
         user = User.getRandomUserCredentials();
-        System.out.println(user);
         userClient = new UserClient();
-        System.out.println(userClient);
-        ValidatableResponse response = userClient.createUser(user);
-        System.out.println(response);
-    }
-
-    @After
-    public void tearDown() {
-        userClient.deleteUser(accessToken);
+        userClient.createUser(user);
     }
 
     @Test
@@ -41,15 +32,11 @@ public class ChangeCredentialsTest {
     @DisplayName("Change credentials as an authorized user")
     public void changeCredentialsWithAuthorizationTest() {
         accessToken = userClient.loginUser(UserCredentials.from(user)).extract().path("accessToken");
-        System.out.println(accessToken);
         accessToken = accessToken.replaceAll("Bearer ", "");
-        System.out.println(accessToken);
         ValidatableResponse response = userClient.changeUserData(UserCredentials.changeCredentials(), accessToken);
-        System.out.println(UserCredentials.changeCredentials());
         int statusCode = response.extract().statusCode();
-        System.out.println(statusCode);
         boolean isChangedSuccessfully = response.extract().path("success");
-        System.out.println(isChangedSuccessfully);
+        userClient.deleteUser(accessToken);
 
         assertThat("Неверный код статуса", statusCode, equalTo(200));
         assertTrue("Данные не изменены", isChangedSuccessfully);
@@ -61,9 +48,7 @@ public class ChangeCredentialsTest {
     public void changeCredentialsWithoutAuthorizationTest() {
         ValidatableResponse response = userClient.changeUserData(UserCredentials.changeCredentials(), "");
         int statusCode = response.extract().statusCode();
-        System.out.println(statusCode);
         String errorMessage = response.extract().path("message");
-        System.out.println(errorMessage);
 
         assertThat("Неверный код статуса", statusCode, equalTo(401));
         assertEquals("Неверное сообщение об ошибке", errorMessage, ("You should be authorised"));

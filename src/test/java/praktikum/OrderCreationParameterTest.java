@@ -25,13 +25,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class OrderCreationParameterTest {
     private UserClient userClient;
     private User user;
-    private UserCredentials credentials;
-    private OrdersClient ordersClient;
-    private Orders orders;
-    private IngredientsClient ingredientsClient;
     private String accessToken;
-    static List<String> ingredients = new ArrayList<>();
-    private static Ingredients orderIngredients;
+    private Ingredients orderIngredients;
     private int expectedStatusCode;
 
     @Before

@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 public class CreateOrderTest {
 
     List<String> ingredients = new ArrayList<>();
-    private IngredientsClient ingredientsClient;
     private User user;
     private UserClient userClient;
     private String accessToken;
@@ -38,18 +37,12 @@ public class CreateOrderTest {
     @DisplayName("Create an order when authorized")
     public void createOrderWithAuthorizationTest() {
         userClient.createUser(user);
-        System.out.println(user);
         accessToken = userClient.loginUser(UserCredentials.from(user)).extract().path("accessToken");
         accessToken = accessToken.replaceAll("Bearer ", "");
-        System.out.println(accessToken);
         ingredients = new IngredientsClient().getIngredients().extract().path("data._id");
-        System.out.println(ingredients);
         Ingredients ingredient = new Ingredients(ingredients.get(3));
-        System.out.println(ingredient);
         ValidatableResponse response = new OrdersClient().createOrder(ingredient, accessToken);
-        System.out.println(response);
         int statusCode = response.extract().statusCode();
-        System.out.println(statusCode);
         boolean isOrderCreated = response.extract().path("success");
 
         assertThat("Неверный код статуса", statusCode, equalTo(200));
@@ -61,13 +54,9 @@ public class CreateOrderTest {
     @DisplayName("Create an order without authorization")
     public void createOrderWithoutAuthorizationTest() {
         ingredients = new IngredientsClient().getIngredients().extract().path("data._id");
-        System.out.println(ingredients);
         Ingredients ingredient = new Ingredients(ingredients.get(3));
-        System.out.println(ingredient);
         ValidatableResponse response = new OrdersClient().createOrder(ingredient, "");
-        System.out.println(response);
         int statusCode = response.extract().statusCode();
-        System.out.println(statusCode);
         boolean isOrderCreated = response.extract().path("success");
 
         assertThat("Неверный код статуса", statusCode, equalTo(200));

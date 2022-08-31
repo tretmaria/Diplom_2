@@ -37,9 +37,7 @@ public class GetOrderListTest {
         userClient.createUser(user);
         accessToken = userClient.loginUser(UserCredentials.from(user)).extract().path("accessToken");
         ValidatableResponse response = ordersClient.getOrders(accessToken);
-        System.out.println(response);
         int statusCode = response.extract().statusCode();
-        System.out.println(statusCode);
         boolean isOrderCreated = response.extract().path("success");
 
         assertEquals("Неверный код статуса", 200, statusCode);
@@ -51,11 +49,8 @@ public class GetOrderListTest {
     @Description("Get a list of orders without authorization")
     public void getOrdersListWithoutAuthorizationTest() {
         ValidatableResponse response = ordersClient.getOrders("");
-        System.out.println(response);
         int statusCode = response.extract().statusCode();
-        System.out.println(statusCode);
         String errorMessage = response.extract().path("message");
-        System.out.println(errorMessage);
 
         assertThat("Неверный код статуса", statusCode, equalTo(401));
         assertTrue("Неверное сообщение об ошибке", errorMessage.equals("You should be authorised"));

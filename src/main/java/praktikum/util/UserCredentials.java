@@ -4,14 +4,15 @@ import com.github.javafaker.Faker;
 import praktikum.model.User;
 
 public class UserCredentials {
-    public String email;
-    public String password;
-    public String name;
-    static Faker faker = new Faker();
+    private String email;
+    private String password;
+    private String name;
+    private static Faker faker = new Faker();
 
     public UserCredentials() {
     }
-    public UserCredentials(String email, String password){
+
+    public UserCredentials(String email, String password) {
         this.email = email;
         this.password = password;
     }
@@ -39,6 +40,7 @@ public class UserCredentials {
         this.password = password;
         return this;
     }
+
     public UserCredentials setName(String name) {
         this.name = name;
         return this;
@@ -52,30 +54,36 @@ public class UserCredentials {
     }
 
     public static UserCredentials from(User user) {
-        return new UserCredentials(user.email, user.password);
+        return new UserCredentials(user.getEmail(), user.getPassword());
     }
+
     public static UserCredentials authorizeWithEmail(User user) {
-        return new UserCredentials().setEmail(user.email);
+        return new UserCredentials().setEmail(faker.internet().emailAddress());
     }
 
     public static UserCredentials authorizeWithPassword(User user) {
-        return new UserCredentials().setPassword(user.password);
+        return new UserCredentials().setPassword(faker.internet().password());
     }
+
     public static UserCredentials authorizeWithRandomCredentials(User user) {
         return new UserCredentials()
                 .setEmail(faker.bothify("????####@gmail.com"))
                 .setPassword(faker.bothify("?????#####"));
     }
-    public static UserCredentials changeEmail(User user){
-        return new UserCredentials().setEmail(user.email);
+
+    public static UserCredentials changeEmail(User user) {
+        return new UserCredentials().setEmail(user.getEmail());
     }
-    public static UserCredentials changePassword(User user){
-        return new UserCredentials().setPassword(user.password);
+
+    public static UserCredentials changePassword(User user) {
+        return new UserCredentials().setPassword(user.getPassword());
     }
-    public static UserCredentials changeName(User user){
-        return new UserCredentials().setName(user.name);
+
+    public static UserCredentials changeName(User user) {
+        return new UserCredentials().setName(user.getName());
     }
-    public static UserCredentials changeCredentials(){
+
+    public static UserCredentials changeCredentials() {
         return new UserCredentials()
                 .setEmail(faker.bothify("????####@gmail.com"))
                 .setPassword(faker.internet().password())

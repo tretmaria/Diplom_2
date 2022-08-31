@@ -1,7 +1,7 @@
 package praktikum.model;
 
 public class Ingredients {
-    String ingredients;
+    private String ingredients;
 
     public Ingredients(String ingredients) {
         this.ingredients = ingredients;

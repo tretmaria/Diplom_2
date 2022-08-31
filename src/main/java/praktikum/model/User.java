@@ -3,10 +3,10 @@ package praktikum.model;
 import com.github.javafaker.Faker;
 
 public class User {
-    public String email;
-    public String password;
-    public String name;
-    static Faker faker = new Faker();
+    private String email;
+    private String password;
+    private String name;
+    private static Faker faker = new Faker();
 
     public User() {
     }
@@ -48,7 +48,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "email='" + email + '\'' +
-                //", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }
@@ -67,11 +66,5 @@ public class User {
     }
     public static User getUserWithNameOnly(){
         return new User().setName(faker.artist().name());
-    }
-    public static User getUserWithoutName(){
-        return new User()
-            .setEmail(faker.bothify("????####@gmail.com"))
-            .setPassword(faker.internet().password())
-            .setEmail("");
     }
 }
