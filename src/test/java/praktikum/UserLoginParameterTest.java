@@ -1,7 +1,6 @@
 package praktikum;
 
 import io.qameta.allure.Description;
-import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +34,7 @@ public class UserLoginParameterTest {
     }
     @After
     public void tearDown() {
-        userClient.deleteUser(accessToken);
+        userClient.delete(accessToken);
     }
 
     @Parameterized.Parameters(name = "Тестовые данные: {0} {1} {2}")
@@ -50,10 +49,10 @@ public class UserLoginParameterTest {
     @DisplayName("Login a user")
     @Description("Login a user with invalid data")
     public void loginWithInvalidDadaTest() {
-        userClient.createUser(user);
-        accessToken = userClient.loginUser(UserCredentials.from(user)).extract().path("accessToken");
-        int actualStatusCode = new UserClient().loginUser(credentials).extract().statusCode();
-        String actualErrorMessage = new UserClient().loginUser(credentials).extract().path("message");
+        userClient.create(user);
+        accessToken = userClient.login(UserCredentials.from(user)).extract().path("accessToken");
+        int actualStatusCode = new UserClient().login(credentials).extract().statusCode();
+        String actualErrorMessage = new UserClient().login(credentials).extract().path("message");
 
         assertEquals("Неверный код статуса", statusCode, actualStatusCode);
         assertEquals("Неверное сообщение об ошибке", errorMessage, actualErrorMessage);

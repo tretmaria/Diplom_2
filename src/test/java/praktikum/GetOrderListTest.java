@@ -3,6 +3,7 @@ package praktikum;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import praktikum.client.OrdersClient;
@@ -19,13 +20,17 @@ public class GetOrderListTest {
     private OrdersClient ordersClient;
     private User user;
     private UserClient userClient;
-
     private String accessToken;
 
     @Before
     public void setUp() {
         ordersClient = new OrdersClient();
-
+    }
+    @After
+    public void tearDown(){
+        if (accessToken != null){
+            userClient.delete(accessToken);
+        }
     }
 
     @Test
@@ -34,8 +39,8 @@ public class GetOrderListTest {
     public void getOrdersListWithAuthorizationTest() {
         user = User.getRandomUserCredentials();
         userClient = new UserClient();
-        userClient.createUser(user);
-        accessToken = userClient.loginUser(UserCredentials.from(user)).extract().path("accessToken");
+        userClient.create(user);
+        accessToken = userClient.login(UserCredentials.from(user)).extract().path("accessToken");
         ValidatableResponse response = ordersClient.getOrders(accessToken);
         int statusCode = response.extract().statusCode();
         boolean isOrderCreated = response.extract().path("success");

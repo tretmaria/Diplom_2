@@ -10,7 +10,7 @@ public class OrdersClient extends RestAssuredClient {
     private static final String ORDERS_PATH = "api/orders";
 
     @Step("Create an order")
-    public ValidatableResponse createOrder(Ingredients ingredients, String accessToken) {
+    public ValidatableResponse create(Ingredients ingredients, String accessToken) {
         return given()
                 .header("Authorization", accessToken)
                 .spec(getBaseSpec())
@@ -29,5 +29,4 @@ public class OrdersClient extends RestAssuredClient {
                 .get(ORDERS_PATH)
                 .then();
     }
-
 }

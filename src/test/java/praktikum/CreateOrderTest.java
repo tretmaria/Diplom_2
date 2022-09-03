@@ -3,6 +3,7 @@ package praktikum;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import praktikum.client.IngredientsClient;
@@ -31,17 +32,22 @@ public class CreateOrderTest {
         user = User.getRandomUserCredentials();
         userClient = new UserClient();
     }
+    @After
+    public void tearDown() {
+        if (accessToken != null){
+            userClient.delete(accessToken);
+        }
+    }
 
     @Test
     @Description("Create an order when authorized")
     @DisplayName("Create an order when authorized")
     public void createOrderWithAuthorizationTest() {
-        userClient.createUser(user);
-        accessToken = userClient.loginUser(UserCredentials.from(user)).extract().path("accessToken");
-        accessToken = accessToken.replaceAll("Bearer ", "");
+        userClient.create(user);
+        accessToken = userClient.login(UserCredentials.from(user)).extract().path("accessToken");
         ingredients = new IngredientsClient().getIngredients().extract().path("data._id");
         Ingredients ingredient = new Ingredients(ingredients.get(3));
-        ValidatableResponse response = new OrdersClient().createOrder(ingredient, accessToken);
+        ValidatableResponse response = new OrdersClient().create(ingredient, accessToken);
         int statusCode = response.extract().statusCode();
         boolean isOrderCreated = response.extract().path("success");
 
@@ -55,12 +61,11 @@ public class CreateOrderTest {
     public void createOrderWithoutAuthorizationTest() {
         ingredients = new IngredientsClient().getIngredients().extract().path("data._id");
         Ingredients ingredient = new Ingredients(ingredients.get(3));
-        ValidatableResponse response = new OrdersClient().createOrder(ingredient, "");
+        ValidatableResponse response = new OrdersClient().create(ingredient, "");
         int statusCode = response.extract().statusCode();
         boolean isOrderCreated = response.extract().path("success");
 
         assertThat("Неверный код статуса", statusCode, equalTo(200));
         assertTrue("Заказ не создан", isOrderCreated);
     }
-
 }

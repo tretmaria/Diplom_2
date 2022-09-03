@@ -3,6 +3,7 @@ package praktikum;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import praktikum.client.UserClient;
@@ -24,19 +25,22 @@ public class ChangeCredentialsTest {
     public void setUp() {
         user = User.getRandomUserCredentials();
         userClient = new UserClient();
-        userClient.createUser(user);
+        userClient.create(user);
     }
-
+    @After
+    public void tearDown(){
+        if (accessToken != null){
+            userClient.delete(accessToken);
+        }
+    }
     @Test
     @Description("Change credentials as an authorized user")
     @DisplayName("Change credentials as an authorized user")
     public void changeCredentialsWithAuthorizationTest() {
-        accessToken = userClient.loginUser(UserCredentials.from(user)).extract().path("accessToken");
-        accessToken = accessToken.replaceAll("Bearer ", "");
+        accessToken = userClient.login(UserCredentials.from(user)).extract().path("accessToken");
         ValidatableResponse response = userClient.changeUserData(UserCredentials.changeCredentials(), accessToken);
         int statusCode = response.extract().statusCode();
         boolean isChangedSuccessfully = response.extract().path("success");
-        userClient.deleteUser(accessToken);
 
         assertThat("Неверный код статуса", statusCode, equalTo(200));
         assertTrue("Данные не изменены", isChangedSuccessfully);

@@ -27,14 +27,14 @@ public class CreateUserTest {
 
     @After
     public void tearDown() {
-        userClient.deleteUser(accessToken);
+        userClient.delete(accessToken);
     }
 
     @Test
     @Description("Create a user successfully")
     @DisplayName("Create a user successfully")
     public void shouldCreateUserTest() {
-        ValidatableResponse response = userClient.createUser(user);
+        ValidatableResponse response = userClient.create(user);
         boolean isUserCreated = response.extract().path("success");
         int statusCode = response.extract().statusCode();
         accessToken = response.extract().path("accessToken");
@@ -47,10 +47,10 @@ public class CreateUserTest {
     @Description("Create an identical user")
     @DisplayName("Create an identical user")
     public void shouldNotCreateIdenticalCourierTest() {
-        userClient.createUser(user);
-        accessToken = userClient.loginUser(UserCredentials.from(user)).extract().path("accessToken");
-        int statusCode = userClient.createUser(user).extract().statusCode();
-        boolean isUserIdentical = userClient.createUser(user).extract().path("message").toString().contains("User already exists");
+        userClient.create(user);
+        accessToken = userClient.login(UserCredentials.from(user)).extract().path("accessToken");
+        int statusCode = userClient.create(user).extract().statusCode();
+        boolean isUserIdentical = userClient.create(user).extract().path("message").toString().contains("User already exists");
 
         assertTrue("Создано два одинаковых пользователя", isUserIdentical);
         assertThat("Неверный код статуса", statusCode, equalTo(403));

@@ -11,7 +11,7 @@ public class UserClient extends RestAssuredClient{
     private static final String USER_PATH = "api/auth/";
 
     @Step("Create a user")
-    public ValidatableResponse createUser(User user) {
+    public ValidatableResponse create(User user) {
         return given()
                 .spec(getBaseSpec())
                 .body(user)
@@ -20,7 +20,7 @@ public class UserClient extends RestAssuredClient{
                 .then();
     }
     @Step("Login a user")
-    public ValidatableResponse loginUser(UserCredentials credentials) {
+    public ValidatableResponse login(UserCredentials credentials) {
         return given()
                 .spec(getBaseSpec())
                 .body(credentials)
@@ -32,7 +32,7 @@ public class UserClient extends RestAssuredClient{
     public ValidatableResponse changeUserData(UserCredentials credentials, String accessToken){
         return given()
                 .spec(getBaseSpec())
-                .auth().oauth2(accessToken)
+                .header("Authorization", accessToken)
                 .and()
                 .body(credentials)
                 .when()
@@ -40,19 +40,19 @@ public class UserClient extends RestAssuredClient{
                 .then();
     }
     @Step("Logout a user")
-    public ValidatableResponse logoutUser(String accessToken) {
+    public ValidatableResponse logout(String accessToken) {
         return given()
                 .spec(getBaseSpec())
-                .auth().oauth2(accessToken)
+                .header("Authorization", accessToken)
                 .when()
                 .post(USER_PATH + "logout")
                 .then();
     }
     @Step("Delete user")
-    public ValidatableResponse deleteUser(String accessToken){
+    public ValidatableResponse delete(String accessToken){
         return given()
                 .spec(getBaseSpec())
-                .auth().oauth2(accessToken)
+                .header("Authorization", accessToken)
                 .when()
                 .delete(USER_PATH + "user")
                 .then();

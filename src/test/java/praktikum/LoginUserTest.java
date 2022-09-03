@@ -24,15 +24,15 @@ public class LoginUserTest {
     }
     @After
     public void tearDown() {
-        userClient.deleteUser(accessToken);
+        userClient.delete(accessToken);
     }
     @Test
     @Description("Login a user successfully")
     @DisplayName("Login a user successfully")
     public void courierLoginTest() {
-        userClient.createUser(user);
-        int statusCode = userClient.loginUser(UserCredentials.from(user)).extract().statusCode();
-        accessToken = userClient.loginUser(UserCredentials.from(user)).extract().path("accessToken");
+        userClient.create(user);
+        int statusCode = userClient.login(UserCredentials.from(user)).extract().statusCode();
+        accessToken = userClient.login(UserCredentials.from(user)).extract().path("accessToken");
 
         assertThat("Неверный код статуса", statusCode, equalTo(200));
         assertThat("Неверный accessToken", accessToken, notNullValue());
