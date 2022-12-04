@@ -1,43 +1,43 @@
 # Diplom_2
-Описание: нужно протестировать ручки API для Stellar Burgers.
-Документация API - https://code.s3.yandex.net/qa-automation-engineer/java/cheatsheets/paid-track/diplom/api-documentation.pdf.
 
-Создание пользователя:
+Description: you need to test the API handles for Stellar Burgers. API documentation is https://code.s3.yandex.net/qa-automation-engineer/java/cheatsheets/paid-track/diplom/api-documentation.pdf.
 
-создать уникального пользователя;
+Creating a User: 
 
-создать пользователя, который уже зарегистрирован;
+User should be unique;
 
-создать пользователя и не заполнить одно из обязательных полей.
+To create a user who is already registered;
 
-Логин пользователя:
+To create a user and not fill in one of the required fields.
 
-логин под существующим пользователем,
+Login a User:
 
-логин с неверным логином и паролем.
+Login an existing user,
 
-Изменение данных пользователя:
+Login with an invalid username and password.
 
-с авторизацией,
+Changing user data:
 
-без авторизации,
+with authorization,
 
-Для обеих ситуаций нужно проверить, что любое поле можно изменить. Для неавторизованного пользователя — ещё и то, что система вернёт ошибку.
+without authorization,
 
-Создание заказа:
+For both situations, you need to check that any field can be changed. For an unauthorized user - also that the system will return an error.
 
-с авторизацией,
+Creating an order:
 
-без авторизации,
+with authorization,
 
-с ингредиентами,
+without authorization,
 
-без ингредиентов,
+with ingredients,
 
-с неверным хешем ингредиентов.
+without ingredients,
 
-Получение заказов конкретного пользователя:
+with a wrong hash of ingredients.
 
-авторизованный пользователь,
+Receiving orders of a specific user:
 
-неавторизованный пользователь.
+authorized user,
+
+unauthorized user.
